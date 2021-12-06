@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>SuckChat</title>
+</head>
+<body>
+<input id="input" type="text" />
+<button onclick="send()">Send</button>
+<pre id="output"></pre>
+<script>
+    var input = document.getElementById("input");
+    var output = document.getElementById("output");
+    var socket = new WebSocket("ws://localhost:80/ws");
+
+    socket.onopen = function () {
+        output.innerHTML += "Status: Connected\n";
+    };
+
+    socket.onmessage = function (e) {
+        output.innerHTML += "Server: " + e.data + "\n";
+    };
+
+    function send() {
+		var obj = {
+		  id:  Math.floor(Math.random() * 999),
+		  message: input.value
+		};
+		var jsonMessage = JSON.stringify(obj); 
+        socket.send(jsonMessage);
+        //input.value = "";
+        //console.log(socket.CONNECTING)
+    }
+</script>
+</body>
+</html>
